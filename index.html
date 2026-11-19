@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acceso al aula · Passkeys</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="etiqueta">DWEC · Laboratorio de JavaScript</p>
+    <h1>Tu móvil, tu acceso al aula.</h1>
+    <p class="intro">Prueba una passkey: entra con la verificación de tu dispositivo, sin escribir una contraseña.</p>
+    <section class="tarjeta" aria-labelledby="titulo-acceso">
+      <h2 id="titulo-acceso">Acceso al aula</h2>
+      <p id="estado" role="status" aria-live="polite">Preparando la aplicación…</p>
+      <div id="sin-sesion" hidden>
+        <p>La primera vez, crea tu cuenta. Si ya tienes una passkey, elige esa opción en el formulario de acceso.</p>
+        <div class="acciones">
+          <button id="entrar" type="button">Iniciar sesión</button>
+          <button id="registrar" class="secundario" type="button">Crear cuenta</button>
+        </div>
+      </div>
+      <div id="con-sesion" hidden>
+        <p>Has iniciado sesión como <strong id="nombre"></strong>.</p>
+        <p>Para preparar el acceso desde este móvil, crea una passkey y sigue el diálogo del dispositivo.</p>
+        <div class="acciones">
+          <button id="crear-passkey" type="button">Crear mi passkey</button>
+          <button id="perfil" class="secundario" type="button">Gestionar mi cuenta</button>
+          <button id="salir" class="secundario" type="button">Cerrar sesión</button>
+        </div>
+        <p class="nota">Después, cierra sesión y vuelve a entrar con la passkey para comprobarla.</p>
+      </div>
+    </section>
+    <section class="pasos" aria-label="Pasos de la práctica">
+      <article><h2>1. Crea tu cuenta</h2><p>Usa un correo al que tengas acceso y completa su verificación.</p></article>
+      <article><h2>2. Añade una passkey</h2><p>Tu móvil te guiará para guardarla en su gestor de credenciales.</p></article>
+      <article><h2>3. Vuelve a entrar</h2><p>Prueba la huella, el rostro o el PIN que te ofrezca el dispositivo.</p></article>
+    </section>
+    <p class="nota">La web no recibe tu huella. Esta práctica demuestra un inicio de sesión; no contiene datos privados protegidos.</p>
+    <footer><a href="LEEME.html">Guía de configuración y explicación para clase</a></footer>
+    <noscript>Necesitas activar JavaScript para utilizar esta práctica.</noscript>
+  </main>
+</body>
+</html>

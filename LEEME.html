@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Guía docente · Passkeys con Clerk</title><link rel="stylesheet" href="styles.css"></head>
+<body><main class="guia">
+<p class="etiqueta">DWEC · Práctica de ampliación · 2026–2027</p>
+<h1>Acceso con passkeys desde el móvil</h1>
+<p>Objetivo: crear una cuenta, asociarle una passkey y volver a entrar con la verificación del dispositivo. Es una demostración de autenticación real con Clerk, sin escribir un servidor propio. Necesita una aplicación de Clerk configurada por el docente.</p>
+<section><h2>1. Qué necesitas</h2>
+<ul><li>Un móvil compatible con passkeys, bloqueo de pantalla configurado y un navegador actualizado. Para probar específicamente la huella, el móvil debe tener sensor y una huella registrada.</li><li>Una cuenta de Clerk y un correo de pruebas que puedas verificar.</li><li>Un alojamiento HTTPS para abrir la aplicación desde el móvil.</li></ul>
+<p>La huella, el rostro o el PIN autorizan al dispositivo a usar la credencial. La web no puede obligar a utilizar exclusivamente la huella ni recibe la imagen biométrica. WebAuthn necesita un contexto seguro. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API">Referencia de WebAuthn</a>.</p>
+<p>Esta práctica introduce eventos, promesas y <code>async/await</code>. Es una ampliación guiada, no un ejemplo limitado a la UT4. Para localizar elementos se utiliza únicamente <code>document.getElementById()</code>.</p></section>
+<section><h2>2. Configurar Clerk</h2>
+<ol><li>Entra en <a href="https://dashboard.clerk.com/">Clerk Dashboard</a> y crea una aplicación, por ejemplo <strong>Aula DWEC Passkeys</strong>.</li>
+<li>Mantén seleccionada la instancia <strong>Development</strong>. En <strong>User &amp; authentication</strong>, habilita el correo con código de verificación para el registro y el acceso inicial. Deja este método disponible para recuperar el acceso.</li>
+<li>En <strong>Passkeys</strong>, activa <strong>Sign-in with passkey</strong> y guarda. Los nombres del panel pueden variar ligeramente.</li>
+<li>En <strong>API keys</strong>, copia la <strong>Publishable Key</strong> de desarrollo y el dominio de <strong>Frontend API URL</strong>. Si no ves el dominio por separado, selecciona JavaScript en Quick Copy: aparece en las direcciones de los scripts.</li>
+<li>Abre <code>config.js</code> y sustituye los dos textos de ejemplo. La clave comienza por <code>pk_test_</code>. El dominio tendrá una forma similar a <code>tu-instancia.clerk.accounts.dev</code>: copia el tuyo, sin <code>https://</code> ni barra final.</li></ol>
+<p>La clave publicable está pensada para el navegador. Nunca copies una <strong>Secret Key</strong> (<code>sk_...</code>) en estos archivos.</p>
+<p>Clerk requiere un registro previo mediante otro método antes de añadir una passkey. Su documentación permite probar esta función en desarrollo; para producción requiere un plan de pago. Consulta las condiciones antes de convertir la práctica en un servicio real. <a href="https://clerk.com/docs/guides/configure/auth-strategies/sign-up-sign-in-options">Configuración oficial</a>.</p></section>
+<section><h2>3. Abrir la práctica en el móvil</h2>
+<p>Para esta prueba puedes alojar los archivos estáticos en GitHub Pages. El alojamiento de la web y la instancia de desarrollo de Clerk son servicios distintos.</p>
+<ol><li>Crea un repositorio independiente, por ejemplo <code>prueba-passkeys</code>. Si utilizas GitHub Free, usa un repositorio público para Pages.</li>
+<li>Sube el contenido de esta carpeta: <code>index.html</code>, <code>styles.css</code>, <code>config.js</code>, <code>app.js</code> y <code>LEEME.html</code>. Deben quedar en la raíz, sin una carpeta adicional envolviéndolos.</li>
+<li>En <strong>Settings → Pages</strong>, selecciona publicación desde una rama, <strong>main</strong> y <strong>/(root)</strong>. Guarda y espera a que termine la publicación.</li>
+<li>Abre la dirección que muestre Pages, similar a <code>https://TU_USUARIO.github.io/prueba-passkeys/</code>, directamente en el navegador del móvil.</li></ol>
+<p><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">Instrucciones oficiales de GitHub Pages</a>.</p>
+<p>Para revisar en el ordenador puedes servir la carpeta con Live Server de VS Code y abrir <code>http://localhost:5500</code>. No abras el HTML mediante doble clic. Una dirección como <code>http://192.168.1.20:5500</code> desde el móvil no proporciona el contexto seguro necesario.</p>
+<p><strong>Crea y usa la passkey en la misma dirección de la práctica.</strong> Una credencial creada en localhost o en el portal de cuentas de Clerk no sirve automáticamente en otro dominio. El ejemplo abre los formularios y el perfil dentro de la aplicación para mantener el dominio. <a href="https://clerk.com/docs/guides/development/custom-flows/authentication/passkeys">Dominios y passkeys en Clerk</a>.</p></section>
+<section><h2>4. Prueba completa, paso a paso</h2>
+<ol><li>En el móvil, pulsa <strong>Crear cuenta</strong>, introduce un correo de pruebas y completa el código recibido. Usa un nombre ficticio si el formulario solicita un nombre.</li>
+<li>Comprueba que la pantalla muestra la sesión iniciada y tu cuenta.</li>
+<li>Pulsa <strong>Crear mi passkey</strong>. Sigue el diálogo del sistema y guarda la credencial en el gestor que te ofrezca el móvil. Autoriza con huella, rostro o PIN.</li>
+<li>Espera el mensaje de confirmación. Si cancelas, la página permite repetir la operación.</li>
+<li>Pulsa <strong>Cerrar sesión</strong>. Comprueba que reaparecen los botones de acceso y registro.</li>
+<li>Pulsa <strong>Iniciar sesión</strong> y elige <strong>Sign in with a passkey</strong> o la opción equivalente del formulario. Según la interfaz, puede aparecer entre otros métodos de acceso.</li>
+<li>Selecciona la credencial y verifica tu identidad con el móvil. Al completar el acceso, volverás a la aplicación.</li>
+<li>En <strong>Gestionar mi cuenta</strong>, revisa la sección de seguridad y las passkeys. Puedes eliminarlas al terminar la práctica; si el gestor del móvil conserva una entrada, elimínala también desde ese gestor.</li></ol>
+<p>Los formularios de Clerk pueden aparecer en inglés. Las etiquetas de nuestra aplicación están en español. Que una sesión se restaure al recargar no demuestra una nueva verificación biométrica: cierra sesión antes de repetir el paso 6.</p></section>
+<section><h2>5. Cómo explicar el código en clase</h2>
+<p><strong>HTML:</strong> define dos zonas, con sesión y sin sesión, y los botones. <strong>CSS:</strong> adapta la presentación al móvil. <strong>config.js:</strong> identifica la instancia. <strong>app.js:</strong> conecta los botones con Clerk y actualiza la pantalla.</p>
+<ol><li><code>cargarScript()</code> carga las bibliotecas. Se puede entregar como infraestructura ya preparada; no es el objetivo principal del ejercicio.</li>
+<li><code>await Clerk.load(...)</code> espera a que el servicio esté listo. <code>await</code> permite esperar dentro de una función <code>async</code> sin bloquear la página.</li>
+<li><code>addEventListener("click", ...)</code> ejecuta la acción cuando el alumno pulsa un botón.</li>
+<li><code>Clerk.openSignUp()</code> y <code>Clerk.openSignIn()</code> muestran los formularios. Clerk se encarga del proceso de registro y autenticación.</li>
+<li><code>await Clerk.user.createPasskey()</code> inicia la creación de la credencial para el usuario conectado.</li>
+<li><code>Clerk.addListener(actualizarPantalla)</code> mantiene la interfaz acorde con los cambios de sesión. <code>textContent</code> escribe el nombre como texto.</li>
+<li><code>try/catch/finally</code> permite comunicar errores y reactivar el botón aunque la operación se cancele.</li></ol>
+<p><a href="https://clerk.com/docs/js-frontend/getting-started/quickstart">Carga de ClerkJS</a> · <a href="https://clerk.com/docs/js-frontend/reference/objects/clerk">Métodos del objeto Clerk</a>.</p>
+<p>Explicación oral sugerida: «El servicio envía un reto. El móvil pide permiso para usar una credencial y genera una respuesta firmada. Clerk la comprueba y crea la sesión. Nuestra página recibe información de esa sesión, nunca la huella».</p>
+<p>La passkey es una credencial criptográfica; la huella es una forma de autorizar su uso. Algunas passkeys se sincronizan mediante el gestor del usuario, por lo que no deben describirse como necesariamente exclusivas de un único teléfono.</p></section>
+<section><h2>6. Comprobaciones y problemas frecuentes</h2>
+<ul><li><strong>Mensaje de configuración:</strong> comprueba los dos valores de <code>config.js</code>, guarda, vuelve a subirlo si procede y recarga.</li>
+<li><strong>No carga Clerk:</strong> comprueba que clave y dominio pertenecen a la misma instancia, que el dominio no incluye el protocolo y que la red no bloquea Clerk. Consulta la consola del navegador.</li>
+<li><strong>No aparece el acceso con passkey:</strong> verifica que está habilitado en esa instancia y que la cuenta tiene una passkey registrada. Conserva el acceso por correo.</li>
+<li><strong>El móvil pide PIN o rostro:</strong> es válido; depende del dispositivo, del gestor y de su configuración. La aplicación no selecciona la modalidad biométrica.</li>
+<li><strong>No se encuentra la credencial:</strong> comprueba dominio, cuenta, navegador y gestor utilizados al crearla. Evita probar en modo privado o en el navegador integrado de una app de mensajería.</li>
+<li><strong>Cancelación:</strong> cancela una creación y comprueba que puedes repetirla. Cancela también un acceso desde una sesión cerrada: no debe aparecer una sesión iniciada.</li>
+<li><strong>Dispositivo incompatible:</strong> utiliza el acceso por correo para seguir la práctica y observa la demostración de passkeys en otro dispositivo.</li></ul>
+<p>No hace falta crear una aplicación nativa Android, instalar Expo ni configurar una asociación con un paquete Android: este ejemplo es una web que se abre en el navegador.</p></section>
+<section><h2>7. Alcance y actividad final</h2>
+<p>La autenticación es real, pero el HTML es público. Cambiar <code>hidden</code> en el navegador permite ver las zonas de esta demostración: no hay notas, documentos privados ni operaciones protegidas. Para añadirlos, el servicio que entregue los datos deberá validar la sesión y los permisos. Un <code>if</code> en JavaScript no sustituye esa autorización.</p>
+<p>Actividad: añade un texto de bienvenida personalizado y un botón para cambiar el color de la tarjeta, localizando los elementos con <code>getElementById</code>. Después responde: ¿quién verifica la credencial?, ¿recibe la web la huella?, ¿por qué se necesita HTTPS?, ¿por qué hay que cerrar sesión para repetir la prueba?</p>
+<p>Entrega sugerida: los archivos y una breve descripción de las pruebas de registro, creación, cancelación y acceso. No entregues contraseñas, códigos de correo ni claves secretas.</p>
+<p><strong>Verificación del ejemplo:</strong> el código se entrega sin credenciales. La prueba completa con el servicio y con el sensor requiere configurar vuestra instancia y realizar el recorrido del apartado 4 en un móvil.</p></section>
+<p><a href="index.html">Abrir la aplicación</a> · Puedes imprimir esta guía o guardarla como PDF desde el navegador.</p>
+</main></body></html>
