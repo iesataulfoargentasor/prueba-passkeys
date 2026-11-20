@@ -87,7 +87,8 @@ async function iniciar() {
     });
     document.getElementById("salir").addEventListener("click", async function () {
       try {
-        await window.Clerk.signOut();
+        // GitHub Pages aloja esta aplicación en /prueba-passkeys/, no en /.
+        await window.Clerk.signOut({ redirectUrl: volverAqui });
         actualizarPantalla();
       } catch (error) {
         console.error("Cierre de sesión:", error);
